@@ -1,7 +1,7 @@
-# Complete Outdoor Activities App MVP Plan
+# Complete OutdoorSync App MVP Plan
 
 ## App Concept
-An app that connects enthusiasts of various outdoor activities, including surfing, hiking, snowboarding, skiing, climbing, and camping. Users can find activity partners, plan trips, and chat in real-time.
+OutdoorSync is an app that connects enthusiasts of various outdoor activities, including surfing, hiking, snowboarding, skiing, climbing, camping, via ferrata, and etc. Users can find activity partners, plan trips, and chat in real-time.
 
 ## Tech Stack
 - Framework: Ruby on Rails with Hotwire (Turbo + Stimulus)
