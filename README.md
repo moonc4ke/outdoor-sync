@@ -1,5 +1,24 @@
-# OutdoorSync
+# README
 
-OutdoorSync is an app that connects enthusiasts of various outdoor activities, including surfing, hiking, snowboarding, skiing, climbing, camping, via ferrata, and etc. Users can find activity partners, plan trips, and chat in real-time.
+This README would normally document whatever steps are necessary to get the
+application up and running.
 
-For a detailed MVP plan, including tech stack, core features, database schema, and deployment steps, refer to [Full MVP Plan](outdoor-sync-full-mvp.md).
+Things you may want to cover:
+
+* Ruby version
+
+* System dependencies
+
+* Configuration
+
+* Database creation
+
+* Database initialization
+
+* How to run the test suite
+
+* Services (job queues, cache servers, search engines, etc.)
+
+* Deployment instructions
+
+* ...
