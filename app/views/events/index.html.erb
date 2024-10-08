@@ -1,0 +1,9 @@
+<h1>Outdoor Events</h1>
+
+<%= turbo_stream_from "events" %>
+
+<div id="events">
+  <%= render @events %>
+</div>
+
+<%= link_to "New Event", new_event_path %>

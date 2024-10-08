@@ -1,0 +1,13 @@
+<h1><%= @chat_room.name %></h1>
+
+<%= turbo_stream_from @chat_room %>
+
+<div id="messages">
+  <%= render @chat_room.messages %>
+</div>
+
+<%= form_with(model: [@chat_room, @message], local: false) do |f| %>
+  <%= f.text_field :content %>
+  <%= f.submit "Send" %>
+<% end %>
+

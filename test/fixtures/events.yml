@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  activity: one
+  location: MyText
+  location_name: MyString
+  start_time: 2024-10-08 18:55:13
+  status: MyString
+  description: MyText
+  max_participants: 1
+
+two:
+  user: two
+  activity: two
+  location: MyText
+  location_name: MyString
+  start_time: 2024-10-08 18:55:13
+  status: MyString
+  description: MyText
+  max_participants: 1
