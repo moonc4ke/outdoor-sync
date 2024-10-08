@@ -583,4 +583,6 @@ Use Turbo (built into Rails 8) for dynamic updates without full page reloads. He
        delete session_url
        assert_redirected_to root_url
        assert_nil session[:user_id]
+     end
+   end
    ```
