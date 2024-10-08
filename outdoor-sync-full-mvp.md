@@ -586,3 +586,198 @@ Use Turbo (built into Rails 8) for dynamic updates without full page reloads. He
      end
    end
    ```
+
+3. Events Controller Test
+
+````ruby
+# test/controllers/events_controller_test.rb
+require "test_helper"
+
+class EventsControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    @user = users(:one)
+    @event = events(:one)
+    login_as(@user)
+  end
+
+  test "should get index" do
+    get events_url
+    assert_response :success
+  end
+
+  test "should get new" do
+    get new_event_url
+    assert_response :success
+  end
+
+  test "should create event" do
+    assert_difference('Event.count') do
+      post events_url, params: { event: { activity_id: @event.activity_id, location: @event.location, start_time: @event.start_time, max_participants: @event.max_participants } }
+    end
+
+    assert_redirected_to event_url(Event.last)
+  end
+
+  test "should show event" do
+    get event_url(@event)
+    assert_response :success
+  end
+end
+
+4. Activity Model Test
+
+```ruby
+# test/models/activity_test.rb
+require "test_helper"
+
+class ActivityTest < ActiveSupport::TestCase
+  test "should not save activity without name" do
+    activity = Activity.new(category: "Hiking")
+    assert_not activity.save, "Saved the activity without a name"
+  end
+
+  test "should not save activity without category" do
+    activity = Activity.new(name: "Mountain Trail Hike")
+    assert_not activity.save, "Saved the activity without a category"
+  end
+
+  test "should save valid activity" do
+    activity = Activity.new(name: "Mountain Trail Hike", category: "Hiking")
+    assert activity.save, "Could not save a valid activity"
+  end
+end
+````
+
+5. ChatRoom Model Test
+
+```ruby
+# test/models/chat_room_test.rb
+require "test_helper"
+
+class ChatRoomTest < ActiveSupport::TestCase
+  test "should create chat room for event" do
+    event = events(:one)
+    chat_room = ChatRoom.create(name: "Event Chat", event: event)
+    assert chat_room.persisted?, "Failed to create chat room for event"
+    assert_equal event, chat_room.event, "Chat room not associated with correct event"
+  end
+
+  test "should create chat room without event" do
+    chat_room = ChatRoom.create(name: "General Chat")
+    assert chat_room.persisted?, "Failed to create chat room without event"
+    assert_nil chat_room.event, "Chat room should not be associated with an event"
+  end
+end
+```
+
+6. Message Model Test
+
+```ruby
+# test/models/message_test.rb
+require "test_helper"
+
+class MessageTest < ActiveSupport::TestCase
+  setup do
+    @user = users(:one)
+    @chat_room = chat_rooms(:one)
+  end
+
+  test "should not save message without content" do
+    message = Message.new(user: @user, chat_room: @chat_room)
+    assert_not message.save, "Saved the message without content"
+  end
+
+  test "should not save message without user" do
+    message = Message.new(content: "Hello", chat_room: @chat_room)
+    assert_not message.save, "Saved the message without user"
+  end
+
+  test "should not save message without chat room" do
+    message = Message.new(content: "Hello", user: @user)
+    assert_not message.save, "Saved the message without chat room"
+  end
+
+  test "should save valid message" do
+    message = Message.new(content: "Hello", user: @user, chat_room: @chat_room)
+    assert message.save, "Could not save a valid message"
+  end
+end
+```
+
+7. Integration Test for User Authentication Flow
+
+```ruby
+# test/integration/user_authentication_test.rb
+require "test_helper"
+
+class UserAuthenticationTest < ActionDispatch::IntegrationTest
+  test "user registration and login flow" do
+    # Register a new user
+    get "/signup"
+    assert_response :success
+
+    post "/users", params: { user: { email_address: "newuser@example.com", password: "password123", password_confirmation: "password123", name: "New User" } }
+    assert_redirected_to root_url
+    follow_redirect!
+    assert_select "div", "Welcome, New User!"
+
+    # Log out
+    delete "/logout"
+    assert_redirected_to root_url
+    follow_redirect!
+    assert_select "a", "Log In"
+
+    # Log in with the new user
+    post "/login", params: { email_address: "newuser@example.com", password: "password123" }
+    assert_redirected_to root_url
+    follow_redirect!
+    assert_select "div", "Welcome, New User!"
+  end
+end
+```
+
+8. System Test for Creating and Joining an Event
+
+```ruby
+# test/system/event_interactions_test.rb
+require "application_system_test_case"
+
+class EventInteractionsTest < ApplicationSystemTestCase
+  setup do
+    @user = users(:one)
+    @activity = activities(:hiking)
+  end
+
+  test "create and join an event" do
+    # Log in
+    visit login_url
+    fill_in "Email", with: @user.email_address
+    fill_in "Password", with: "password"
+    click_on "Log In"
+
+    # Create a new event
+    visit new_event_url
+    fill_in "Location", with: "Mountain Trail"
+    fill_in "Start time", with: 1.day.from_now
+    fill_in "Max participants", with: 5
+    select @activity.name, from: "Activity"
+    click_on "Create Event"
+
+    assert_text "Event was successfully created"
+
+    # Another user joins the event
+    click_on "Logout"
+    @another_user = users(:two)
+    visit login_url
+    fill_in "Email", with: @another_user.email_address
+    fill_in "Password", with: "password"
+    click_on "Log In"
+
+    visit events_url
+    click_on "Mountain Trail"
+    click_on "Join Event"
+
+    assert_text "You have successfully joined the event"
+  end
+end
+```
