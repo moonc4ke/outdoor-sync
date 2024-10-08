@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_secure_password
+  has_many :sessions, dependent: :destroy
   has_many :events
   has_many :participants
   has_many :messages
