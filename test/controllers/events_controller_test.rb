@@ -6,7 +6,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get new events page" do
+  test "should get new events page and delete session" do
     get new_event_url
     assert_redirected_to new_session_url
 
@@ -15,5 +15,9 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_event_url
     follow_redirect!
     assert_response :success
+
+    delete session_url
+    get new_event_url
+    assert_redirected_to new_session_url
   end
 end
