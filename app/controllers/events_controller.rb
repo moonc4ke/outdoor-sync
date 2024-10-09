@@ -1,4 +1,7 @@
 class EventsController < ApplicationController
+  allow_unauthenticated_access only: %i[ index show ]
+  before_action :resume_session, only: %i[ index show ]
+
   def index
     @events = Event.all
   end

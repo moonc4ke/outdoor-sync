@@ -4,7 +4,6 @@ Rails.application.routes.draw do
   get  "sign_up", to: "registrations#new"
   post "sign_up", to: "registrations#create"
 
-  # Authentication routes are already set up by the generator
   resources :events, only: [ :index, :show, :new, :create ]
   resources :chat_rooms, only: [ :show ] do
     resources :messages, only: [ :create ]
