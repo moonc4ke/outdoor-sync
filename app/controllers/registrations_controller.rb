@@ -6,20 +6,6 @@ class RegistrationsController < ApplicationController
     @user = User.new
   end
 
-  # def create
-  #   @user = User.new(user_params)
-  #   if @user.save
-  #     if user = User.authenticate_by(email_address: params[:user][:email_address], password: params[:user][:password])
-  #       start_new_session_for user
-  #       redirect_to after_authentication_url
-  #     else
-  #       redirect_to new_registration_url, alert: "Registration successful, but unable to log in. Please try logging in manually."
-  #     end
-  #   else
-  #     redirect_to new_registration_url, alert: "Registration failed. Please try again."
-  #   end
-  # end 
-
   def create
     @user = User.new(user_params)
     if @user.save
