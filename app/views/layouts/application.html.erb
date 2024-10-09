@@ -23,9 +23,14 @@
   </head>
 
   <body>
+    <%= link_to "Events", events_path %>
+    
     <% if authenticated? %>
       <%= Current.user.email_address %>
-      <%= button_to "Sign Out", session_path, method: :delete %>
+      <%= link_to "Sign Out", session_path, method: :delete, data: { turbo_method: :delete } %>
+    <% else %>
+      <%= link_to "Sign In", new_session_path %>
+      <%= link_to "Sign Up", sign_up_path %>
     <% end %>
 
     <%= yield %>
